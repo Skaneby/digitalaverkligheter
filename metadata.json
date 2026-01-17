@@ -1,0 +1,7 @@
+{
+  "name": "Digitala Verkligheter",
+  "description": "A high-performance portfolio for Digitala Verkligheter, featuring cinematic storytelling and advanced tech consulting.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}
