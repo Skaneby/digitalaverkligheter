@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { NavigationTab, Capability, BlogPost, AdminSettings, Language } from './types';
 import Hero from './components/Hero';
@@ -6,6 +5,7 @@ import Capabilities from './components/Capabilities';
 import Insights from './components/Insights';
 import Footer from './components/Footer';
 import AdminPanel from './components/AdminPanel';
+import Profile from './components/Profile';
 import { translateContent } from './services/geminiService';
 
 const App: React.FC = () => {
@@ -21,8 +21,8 @@ const App: React.FC = () => {
   });
 
   const [heroContent, setHeroContent] = useState({
-    title: 'Digitala Verkligheter',
-    subtitle: 'Strategisk innovation och digital produktion med människan i centrum.'
+    title: 'Finns tekniken för vår skull? eller finns vi för teknikens skull?',
+    subtitle: 'Utforska framtidens digitala lösningar med Digitala Verkligheter. Vad behöver vi människor och hur kan vi använda tekniken så bra som möjligt för alla?'
   });
 
   const [capabilities, setCapabilities] = useState<Capability[]>([
@@ -31,7 +31,24 @@ const App: React.FC = () => {
     { id: '3', title: 'Teknikutveckling', description: 'Moderna lösningar baserade på Next.js och AI.', icon: 'code' }
   ]);
 
-  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
+  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([
+    {
+      id: '1',
+      title: 'Reflektioner inför 2026',
+      excerpt: 'Året går mot sitt slut... Tankar kring AI-tekniken, Googles dominans, och vikten av källkritik inför valet 2026.',
+      tag: 'AI & Framtid',
+      date: '2026-01-11',
+      imageUrl: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=80&w=800' // AI/Tech image
+    },
+    {
+      id: '2',
+      title: 'Internethistoria: Loronix',
+      excerpt: 'Vilka minnen! Videon som blev en av internets tidigaste virala hits.',
+      tag: 'Historia',
+      date: '2026-01-15',
+      imageUrl: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=800' // Retro tech image
+    }
+  ]);
 
   const handleScrapedData = (data: any) => {
     setIsSyncing(true);
@@ -43,6 +60,25 @@ const App: React.FC = () => {
       setIsSyncing(false);
       setActiveTab(NavigationTab.HOME);
     }, 1500);
+  };
+
+  const renderContent = () => {
+    switch (activeTab) {
+      case NavigationTab.ADMIN:
+        return <AdminPanel settings={settings} onSave={setSettings} onDataLoaded={handleScrapedData} />;
+      case NavigationTab.PROFILE:
+        return <Profile lang={lang} />;
+      case NavigationTab.HOME:
+      default:
+        return (
+          <div className="animate-in fade-in slide-in-from-bottom-2 duration-700">
+            <Hero title={heroContent.title} subtitle={heroContent.subtitle} />
+            <Capabilities capabilities={capabilities} lang={lang} />
+            <Insights posts={blogPosts} lang={lang} />
+            <Footer lang={lang} />
+          </div>
+        );
+    }
   };
 
   return (
@@ -75,18 +111,9 @@ const App: React.FC = () => {
           </button>
         </div>
       </header>
-
+      
       <main className="pt-20 max-w-4xl mx-auto px-6">
-        {activeTab === NavigationTab.ADMIN ? (
-          <AdminPanel settings={settings} onSave={setSettings} onDataLoaded={handleScrapedData} />
-        ) : (
-          <div className="animate-in fade-in slide-in-from-bottom-2 duration-700">
-            <Hero title={heroContent.title} subtitle={heroContent.subtitle} />
-            <Capabilities capabilities={capabilities} lang={lang} />
-            <Insights posts={blogPosts} lang={lang} />
-            <Footer lang={lang} />
-          </div>
-        )}
+        {renderContent()}
       </main>
 
       {/* Kompakt bottenmeny (Pill) */}
