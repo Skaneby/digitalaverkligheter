@@ -20,7 +20,7 @@ This project is a modern reimagining of [digitalaverkligheter.se](https://www.di
 - [x] Project scaffolding (Vite + React + TS).
 - [x] Basic routing/tab navigation (Home, Case, Lab, Profile).
 - [x] "Live Sync" simulation placeholders.
-- [ ] Content migration from original site.
+- [x] Content migration from original site (via SQL dump).
 - [ ] GitHub repository setup.
 
 ## Next Steps

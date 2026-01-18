@@ -3,9 +3,10 @@ import { Language } from '../types';
 
 interface ProfileProps {
   lang: Language;
+  content?: string;
 }
 
-const Profile: React.FC<ProfileProps> = ({ lang }) => {
+const Profile: React.FC<ProfileProps> = ({ lang, content }) => {
   return (
     <section className="py-12 space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-200">
       
@@ -23,26 +24,32 @@ const Profile: React.FC<ProfileProps> = ({ lang }) => {
             </h2>
             
             <div className="prose prose-invert max-w-none text-slate-300 leading-relaxed space-y-4">
-              <p>
-                {lang === 'sv' 
-                  ? "Jag började arbeta med analog filmproduktion i början av 90-talet. Sedan dess har jag följt mediaformatet in i den digitala världen, både som fotograf, redigerare, arbetsflödes- och videokomprimeringsspecialist och teknisk skribent."
-                  : "I started working with analog film production in the early 90s. Since then, I have followed the media format into the digital world, working as a photographer, editor, workflow and video compression specialist, and technical writer."}
-              </p>
-              <p>
-                {lang === 'sv'
-                  ? "Mina arbetsgivare genom åren har främst varit Telestream INC, Macoteket AB, Eyevinn Technology, Vidispine AB, Junefirst AB (tidigare June/First Light) och nu senast franska ATEME."
-                  : "My employers over the years have primarily been Telestream INC, Macoteket AB, Eyevinn Technology, Vidispine AB, Junefirst AB (formerly June/First Light), and most recently, French ATEME."}
-              </p>
-              <p>
-                {lang === 'sv'
-                  ? "Som konsult och tekniskt säljstöd har jag i dessa företag arbetat med ett stort antal kunder runt om i världen genom åren. UR, NRK, Hasselblad, RTVE, ComHem, Teracom, LO, Aftonbladet, SVD, ABC, US NAVY, RedBee, Ericsson, SF Studios, RED BULL TV, RUV, NOS - listan är lång."
-                  : "As a consultant and technical sales support, I have worked with a large number of clients around the world over the years. UR, NRK, Hasselblad, RTVE, ComHem, Teracom, LO, Aftonbladet, SVD, ABC, US NAVY, RedBee, Ericsson, SF Studios, RED BULL TV, RUV, NOS - the list is long."}
-              </p>
-              <p className="italic text-primary/80">
-                {lang === 'sv'
-                  ? "Jag är även en passionerad musiker. Sök på Honeycave och Cod lovers på närmaste musikplattform."
-                  : "I am also a passionate musician. Search for Honeycave and Cod lovers on your nearest music platform."}
-              </p>
+              {content ? (
+                <div dangerouslySetInnerHTML={{ __html: content }} />
+              ) : (
+                <>
+                  <p>
+                    {lang === 'sv' 
+                      ? "Jag började arbeta med analog filmproduktion i början av 90-talet. Sedan dess har jag följt mediaformatet in i den digitala världen, både som fotograf, redigerare, arbetsflödes- och videokomprimeringsspecialist och teknisk skribent."
+                      : "I started working with analog film production in the early 90s. Since then, I have followed the media format into the digital world, working as a photographer, editor, workflow and video compression specialist, and technical writer."}
+                  </p>
+                  <p>
+                    {lang === 'sv'
+                      ? "Mina arbetsgivare genom åren har främst varit Telestream INC, Macoteket AB, Eyevinn Technology, Vidispine AB, Junefirst AB (tidigare June/First Light) och nu senast franska ATEME."
+                      : "My employers over the years have primarily been Telestream INC, Macoteket AB, Eyevinn Technology, Vidispine AB, Junefirst AB (formerly June/First Light), and most recently, French ATEME."}
+                  </p>
+                  <p>
+                    {lang === 'sv'
+                      ? "Som konsult och tekniskt säljstöd har jag i dessa företag arbetat med ett stort antal kunder runt om i världen genom åren. UR, NRK, Hasselblad, RTVE, ComHem, Teracom, LO, Aftonbladet, SVD, ABC, US NAVY, RedBee, Ericsson, SF Studios, RED BULL TV, RUV, NOS - listan är lång."
+                      : "As a consultant and technical sales support, I have worked with a large number of clients around the world over the years. UR, NRK, Hasselblad, RTVE, ComHem, Teracom, LO, Aftonbladet, SVD, ABC, US NAVY, RedBee, Ericsson, SF Studios, RED BULL TV, RUV, NOS - the list is long."}
+                  </p>
+                  <p className="italic text-primary/80">
+                    {lang === 'sv'
+                      ? "Jag är även en passionerad musiker. Sök på Honeycave och Cod lovers på närmaste musikplattform."
+                      : "I am also a passionate musician. Search for Honeycave and Cod lovers on your nearest music platform."}
+                  </p>
+                </>
+              )}
             </div>
           </div>
         </div>

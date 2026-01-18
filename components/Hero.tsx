@@ -8,17 +8,14 @@ interface HeroProps {
 
 const Hero: React.FC<HeroProps> = ({ title, subtitle }) => {
   return (
-    <section className="px-6 py-20 text-center space-y-8">
-      <div className="inline-block bg-primary/5 border border-primary/20 px-4 py-1 rounded-full">
-        <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-primary">Portfolio v2.0</span>
+    <section className="px-6 py-24 text-center space-y-8 relative z-10">
+      <div className="inline-block bg-white/5 backdrop-blur-sm border border-white/10 px-6 py-2 rounded-full animate-[float_4s_ease-in-out_infinite]">
+        <span className="text-[12px] font-medium tracking-widest text-primary bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
+          Portfolio v2.0
+        </span>
       </div>
-      <h1 className="text-6xl md:text-8xl font-black tracking-tighter uppercase leading-[0.85] break-words">
-        {title.split(' ').map((word, i) => (
-          <React.Fragment key={i}>
-            <span className={i % 2 !== 0 ? 'text-primary' : ''}>{word}</span>
-            <br />
-          </React.Fragment>
-        ))}
+      <h1 className="text-5xl md:text-7xl font-bold tracking-tight leading-[1.1] break-words max-w-4xl mx-auto bg-clip-text text-transparent bg-gradient-to-br from-white via-slate-200 to-slate-400 drop-shadow-2xl">
+        {title}
       </h1>
       <p className="max-w-xl mx-auto text-lg text-slate-400 font-light leading-relaxed">
         {subtitle}

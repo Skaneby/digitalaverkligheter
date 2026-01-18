@@ -6,13 +6,15 @@ import Insights from './components/Insights';
 import Footer from './components/Footer';
 import AdminPanel from './components/AdminPanel';
 import Profile from './components/Profile';
-import { translateContent } from './services/geminiService';
+import SinglePostView from './components/SinglePostView';
+import { getBlogPosts, getPage } from './services/contentService';
 
 const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState<NavigationTab>(NavigationTab.HOME);
   const [lang, setLang] = useState<Language>('sv');
   const [isSyncing, setIsSyncing] = useState(false);
-  
+  const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
+
   const [settings, setSettings] = useState<AdminSettings>({
     facebookPageId: 'digitalaverkligheter.se',
     facebookAccessToken: '',
@@ -21,8 +23,8 @@ const App: React.FC = () => {
   });
 
   const [heroContent, setHeroContent] = useState({
-    title: 'Finns tekniken för vår skull? eller finns vi för teknikens skull?',
-    subtitle: 'Utforska framtidens digitala lösningar med Digitala Verkligheter. Vad behöver vi människor och hur kan vi använda tekniken så bra som möjligt för alla?'
+    title: 'Digitala Verkligheter',
+    subtitle: 'Finns tekniken för vår skull? Eller finns vi för teknikens skull? Utforska framtidens digitala lösningar med människan i centrum.'
   });
 
   const [capabilities, setCapabilities] = useState<Capability[]>([
@@ -31,24 +33,19 @@ const App: React.FC = () => {
     { id: '3', title: 'Teknikutveckling', description: 'Moderna lösningar baserade på Next.js och AI.', icon: 'code' }
   ]);
 
-  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([
-    {
-      id: '1',
-      title: 'Reflektioner inför 2026',
-      excerpt: 'Året går mot sitt slut... Tankar kring AI-tekniken, Googles dominans, och vikten av källkritik inför valet 2026.',
-      tag: 'AI & Framtid',
-      date: '2026-01-11',
-      imageUrl: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=80&w=800' // AI/Tech image
-    },
-    {
-      id: '2',
-      title: 'Internethistoria: Loronix',
-      excerpt: 'Vilka minnen! Videon som blev en av internets tidigaste virala hits.',
-      tag: 'Historia',
-      date: '2026-01-15',
-      imageUrl: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=800' // Retro tech image
+  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
+  const [aboutMeContent, setAboutMeContent] = useState<string>('');
+
+  useEffect(() => {
+    // Load migrated data
+    const posts = getBlogPosts();
+    setBlogPosts(posts);
+
+    const aboutPage = getPage('om-mig') || getPage('about-me');
+    if (aboutPage) {
+        setAboutMeContent(aboutPage.content);
     }
-  ]);
+  }, []);
 
   const handleScrapedData = (data: any) => {
     setIsSyncing(true);
@@ -63,18 +60,22 @@ const App: React.FC = () => {
   };
 
   const renderContent = () => {
+    if (selectedPost) {
+      return <SinglePostView post={selectedPost} onClose={() => setSelectedPost(null)} />;
+    }
+
     switch (activeTab) {
       case NavigationTab.ADMIN:
         return <AdminPanel settings={settings} onSave={setSettings} onDataLoaded={handleScrapedData} />;
       case NavigationTab.PROFILE:
-        return <Profile lang={lang} />;
+        return <Profile lang={lang} content={aboutMeContent} />;
       case NavigationTab.HOME:
       default:
         return (
           <div className="animate-in fade-in slide-in-from-bottom-2 duration-700">
             <Hero title={heroContent.title} subtitle={heroContent.subtitle} />
             <Capabilities capabilities={capabilities} lang={lang} />
-            <Insights posts={blogPosts} lang={lang} />
+            <Insights posts={blogPosts} lang={lang} onPostClick={setSelectedPost} />
             <Footer lang={lang} />
           </div>
         );
@@ -85,7 +86,7 @@ const App: React.FC = () => {
     <div className="min-h-screen bg-background-dark text-slate-100 pb-24">
       {/* Minimal Header */}
       <header className="fixed top-0 left-0 right-0 z-[60] glass-header px-6 h-14 flex justify-between items-center border-b border-white/5">
-        <div className="flex items-center space-x-2 cursor-pointer" onClick={() => setActiveTab(NavigationTab.HOME)}>
+        <div className="flex items-center space-x-2 cursor-pointer" onClick={() => { setActiveTab(NavigationTab.HOME); setSelectedPost(null); }}>
           <span className="material-symbols-outlined text-primary text-xl">blur_on</span>
           <span className="font-bold text-xs uppercase tracking-widest">Digitala Verkligheter</span>
           {isSyncing && (
@@ -117,7 +118,7 @@ const App: React.FC = () => {
       </main>
 
       {/* Kompakt bottenmeny (Pill) */}
-      {activeTab !== NavigationTab.ADMIN && (
+      {!selectedPost && activeTab !== NavigationTab.ADMIN && (
         <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50">
           <nav className="flex items-center bg-card-dark/90 backdrop-blur-xl border border-white/10 rounded-full p-1.5 shadow-2xl">
             {[

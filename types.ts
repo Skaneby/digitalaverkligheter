@@ -7,7 +7,14 @@ export interface BlogPost {
   excerpt: string;
   tag: string;
   imageUrl: string;
-  date?: string;
+  content?: string;
+}
+
+export interface PageContent {
+  id: string;
+  title: string;
+  content: string;
+  slug: string;
 }
 
 export interface Capability {

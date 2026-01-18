@@ -5,9 +5,10 @@ import { BlogPost, Language } from '../types';
 interface InsightsProps {
   posts: BlogPost[];
   lang: Language;
+  onPostClick: (post: BlogPost) => void;
 }
 
-const Insights: React.FC<InsightsProps> = ({ posts, lang }) => {
+const Insights: React.FC<InsightsProps> = ({ posts, lang, onPostClick }) => {
   return (
     <section className="mt-24 pl-6">
       <div className="flex justify-between items-end pr-6 mb-8">
@@ -26,6 +27,7 @@ const Insights: React.FC<InsightsProps> = ({ posts, lang }) => {
         {posts.map((post) => (
           <div 
             key={post.id} 
+            onClick={() => onPostClick(post)}
             className="min-w-[280px] md:min-w-[340px] bg-card-dark rounded-xl overflow-hidden border border-white/5 hover:border-primary/20 transition-all cursor-pointer group"
           >
             <div className="h-40 md:h-48 relative">
